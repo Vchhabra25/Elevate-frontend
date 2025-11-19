@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { API } from "../config";
 
 // Register chart modules
 ChartJS.register(
@@ -30,7 +31,8 @@ export default function Analytics() {
 
   useEffect(() => {
     // Fetch tasks
-    fetch("https://elevate-backend.onrender.com/tasks")
+    fetch(`${API}/tasks`)
+
       .then((res) => res.json())
       .then((data) => setTaskCount(data.length))
       .catch(() => console.log("Tasks fetch failed"));

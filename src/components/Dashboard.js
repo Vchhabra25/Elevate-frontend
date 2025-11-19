@@ -1,16 +1,9 @@
 // frontend/src/components/Dashboard.js
 import React, { useEffect, useState } from "react";
+import { API } from "../config";
 
 /*  
   ELEVATE DASHBOARD (UPGRADED UI)
-  -------------------------------
-  ✨ New Additions:
-  - Soft pastel card backgrounds
-  - Rounded glass panels
-  - Modern task list with timers
-  - Improved focus timer UI
-  - Better spacing & readability
-  - Mobile-responsive layout
 */
 
 // -------------------- FOCUS TIMER --------------------
@@ -74,13 +67,15 @@ function AddTaskCard({ onAdd }) {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/tasks", {
+      const res = await fetch(`${API}/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+
       const data = await res.json();
       onAdd(data.task);
+
       setForm({ subject: "", topic: "", time: "" });
     } catch (err) {
       alert("Backend not running");
@@ -96,16 +91,18 @@ function AddTaskCard({ onAdd }) {
       <form onSubmit={submit} className="space-y-3">
         <input
           placeholder="Subject (e.g. Math)"
-          className="w-full p-3 rounded-xl border border-[#D6CCE9] outline-none"
+          className="w-full p-3 rounded-xl border border-[#D6CCE9]"
           value={form.subject}
           onChange={(e) => setForm({ ...form, subject: e.target.value })}
         />
+
         <input
           placeholder="Topic (e.g. Arrays)"
           className="w-full p-3 rounded-xl border border-[#D6CCE9]"
           value={form.topic}
           onChange={(e) => setForm({ ...form, topic: e.target.value })}
         />
+
         <input
           placeholder="Time (e.g. 45 min)"
           className="w-full p-3 rounded-xl border border-[#D6CCE9]"
@@ -155,7 +152,6 @@ function TaskList({ tasks, onDelete }) {
     localStorage.setItem("focusMinutes", total + mins);
 
     alert(`⏱ +${mins} minutes added`);
-
     setActive(null);
     setElapsed(0);
   };
@@ -185,6 +181,7 @@ function TaskList({ tasks, onDelete }) {
                   {t.subject} •{" "}
                   <span className="text-sm text-[#7F7F90]">{t.topic}</span>
                 </div>
+
                 <div className="text-xs text-[#7F7F90]">{t.time}</div>
 
                 {active === t._id && (
@@ -218,6 +215,7 @@ function TaskList({ tasks, onDelete }) {
                     Start
                   </button>
                 )}
+
                 <button
                   onClick={() => onDelete(t._id)}
                   className="px-3 py-1 bg-red-100 text-red-600 rounded-lg"
@@ -241,11 +239,12 @@ function TaskList({ tasks, onDelete }) {
 export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
 
-  // fetch tasks
+  // Fetch tasks from backend
   useEffect(() => {
-    fetch("https://elevate-backend.onrender.com/tasks")
+    fetch(`${API}/tasks`)
       .then((r) => r.json())
-      .then((d) => setTasks(d));
+      .then((d) => setTasks(d))
+      .catch(() => console.log("Backend not reachable"));
   }, []);
 
   const addLocal = (t) => setTasks((p) => [...p, t]);
@@ -264,10 +263,12 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <FocusTimer />
+
           <div className="bg-white/80 p-4 rounded-2xl shadow border border-[#E6DFFF]">
             <h3 className="font-semibold text-[#1B1B2F] mb-1">Reflection</h3>
             <p className="text-sm text-[#7F7F90]">Write a short diary today ✍️</p>
           </div>
+
           <div className="bg-white/80 p-4 rounded-2xl shadow border border-[#E6DFFF]">
             <h3 className="font-semibold text-[#1B1B2F] mb-1">Journey</h3>
             <p className="text-sm text-[#7F7F90]">Milestones coming soon 🌱</p>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API } from "../config";
 
 export default function Reflections() {
   const [note, setNote] = useState("");
@@ -25,6 +26,7 @@ export default function Reflections() {
     setFeedback(lines[Math.floor(Math.random() * lines.length)]);
   }, []);
 
+  // Save reflection
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!note.trim()) return;
@@ -49,9 +51,10 @@ export default function Reflections() {
 
     try {
       setLoadingAI(true);
-      const res = await axios.post("https://elevate-backend.onrender.com/ai/reflection/analyze", {
+      const res = await axios.post(`${API}/ai/reflection/analyze`, {
         text: note,
       });
+
       setAiResult(res.data.reply);
     } catch (e) {
       setAiResult("❌ AI could not analyze right now.");

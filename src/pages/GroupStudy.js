@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 
-const API = "https://elevate-backend.onrender.com";
+import { API } from "../config";
 
 export default function GroupStudy() {
   const [code, setCode] = useState("");
