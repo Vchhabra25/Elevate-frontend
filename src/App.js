@@ -1,6 +1,7 @@
 // frontend/src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
 import Focus from "./pages/Focus";
@@ -9,8 +10,6 @@ import Analytics from "./components/Analytics";
 import Nav from "./components/Nav";
 import MusicPlayer from "./components/MusicPlayer";
 import GroupStudy from "./pages/GroupStudy";
-import { API } from "../config";
-
 
 function App() {
   return (
@@ -25,7 +24,6 @@ function App() {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/groups" element={<GroupStudy />} />
         </Routes>
-
         <MusicPlayer />
       </div>
     </Router>
