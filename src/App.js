@@ -9,6 +9,8 @@ import Analytics from "./components/Analytics";
 import Nav from "./components/Nav";
 import MusicPlayer from "./components/MusicPlayer";
 import GroupStudy from "./pages/GroupStudy";
+import { API } from "../config";
+
 
 function App() {
   return (

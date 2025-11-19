@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Music, Play, Pause, X } from "lucide-react";
+import { API } from "../config";
+
 
 export default function MusicPlayer() {
   const audioRef = useRef(null);
