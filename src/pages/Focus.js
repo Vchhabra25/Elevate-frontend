@@ -31,19 +31,25 @@ export default function Focus() {
 
   return (
     <div className="relative pt-28 px-6 min-h-screen bg-gradient-to-br from-[#F6F1FF] via-[#FBF9FF] to-[#EDE9F7]">
+
+      {/* Page Title */}
       <h1 className="text-4xl font-extrabold text-center text-[#1A1A2E] drop-shadow-sm">
         Focus Mode 🎧
       </h1>
+      <p className="text-center text-[#7A7A85] mt-2">
+        Stay calm. Stay consistent. Stay focused.
+      </p>
 
-      <div className="mt-10 mx-auto max-w-md bg-white/80 rounded-3xl shadow-2xl p-8">
-        <div className="text-7xl font-bold text-[#7F5AF0]">
+      {/* TIMER CARD */}
+      <div className="mt-10 mx-auto max-w-md bg-white/80 rounded-3xl shadow-2xl p-8 border border-[#E3DAF7] text-center">
+        <div className="text-7xl font-bold text-[#7F5AF0] tracking-wide">
           {m}:{s}
         </div>
 
         <div className="flex justify-center gap-4 mt-6">
           <button
             onClick={() => setRunning(!running)}
-            className="px-8 py-3 bg-[#7F5AF0] text-white rounded-xl"
+            className="px-8 py-3 rounded-xl bg-[#7F5AF0] text-white shadow hover:bg-[#6B47DD]"
           >
             {running ? "Pause" : "Start"}
           </button>
@@ -53,28 +59,90 @@ export default function Focus() {
               setRunning(false);
               setTime(1500);
             }}
-            className="px-8 py-3 border border-[#C9BDD9]"
+            className="px-8 py-3 rounded-xl border border-[#C9BDD9] hover:bg-[#F6F1FF]"
           >
             Reset
           </button>
         </div>
       </div>
 
-      {/* AI Suggestion */}
-      <div className="mt-10 text-center">
+      {/* MUSIC + EXERCISE GRID */}
+      <div className="max-w-5xl mx-auto mt-16 grid md:grid-cols-2 gap-8">
+
+        {/* SOOTHING MUSIC */}
+        <div className="bg-white/80 rounded-3xl border border-[#E7DFFF] shadow-xl p-6">
+          <h2 className="text-2xl font-bold text-[#7F5AF0] mb-4">
+            🎶 Soothing Music
+          </h2>
+
+          <div className="space-y-3">
+            {[
+              { title: "LoFi Beats Radio", link: "https://youtu.be/5qap5aO4i9A" },
+              { title: "Deep Focus Music", link: "https://youtu.be/wDjeBNv6ip0" },
+              { title: "Ambient Soft Piano", link: "https://youtu.be/Dx5qFachd3A" },
+              { title: "Relaxing Nature Sounds", link: "https://youtu.be/odfF-p9K5O8" },
+            ].map((music) => (
+              <a
+                key={music.title}
+                href={music.link}
+                target="_blank"
+                className="block p-4 bg-[#F8F4FF] border border-[#EAD6FF] rounded-xl hover:shadow-md hover:bg-[#F3E9FF] transition"
+              >
+                <p className="font-semibold text-[#1A1A2E]">{music.title}</p>
+                <p className="text-xs text-[#7A7A85]">Tap to listen →</p>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* QUICK FOCUS EXERCISES */}
+        <div className="bg-white/80 rounded-3xl border border-[#E7DFFF] shadow-xl p-6">
+          <h2 className="text-2xl font-bold text-[#7F5AF0] mb-4">
+            🧘 Quick Focus Exercises
+          </h2>
+
+          <div className="space-y-4">
+            <div className="p-4 bg-[#F4EAFF] border border-[#E0CCFF] rounded-xl">
+              <h3 className="font-semibold text-[#5B3FD6]">🔹 4-4-6 Breathing</h3>
+              <p className="text-sm text-[#6A6A70] mt-1">
+                Inhale 4s → Hold 4s → Exhale 6s. Repeat for 1 minute.
+              </p>
+            </div>
+
+            <div className="p-4 bg-[#EAF2FF] border border-[#CFE4FF] rounded-xl">
+              <h3 className="font-semibold text-[#3E6CE8]">🔹 20s Eye Reset</h3>
+              <p className="text-sm text-[#6A6A70] mt-1">
+                Look at a distant object for 20 seconds to relax your eyes.
+              </p>
+            </div>
+
+            <div className="p-4 bg-[#FFEAF2] border border-[#FFD1E3] rounded-xl">
+              <h3 className="font-semibold text-[#E86CA8]">🔹 Posture Fix</h3>
+              <p className="text-sm text-[#6A6A70] mt-1">
+                Sit straight, relax shoulders, unclench jaw, breathe slowly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* AI Suggestion Box */}
+      <div className="mt-16 text-center max-w-xl mx-auto">
         <button
           onClick={askAI}
-          className="px-8 py-4 bg-[#46C7E8] text-white rounded-xl shadow"
+          className="px-8 py-4 bg-[#46C7E8] text-white rounded-xl shadow hover:bg-[#34b4d3] transition"
         >
           Ask AI: “How can I focus better today?”
         </button>
 
         {aiReply && (
-          <div className="mt-6 p-4 bg-white/80 rounded-xl shadow-lg">
+          <div className="mt-6 p-5 bg-white/80 border border-[#D9EDFF] rounded-2xl shadow text-[#1A1A2E]">
             {aiReply}
           </div>
         )}
       </div>
+
+      <div className="h-20" />
     </div>
   );
 }
