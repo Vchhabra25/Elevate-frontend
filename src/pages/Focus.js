@@ -6,12 +6,58 @@ export default function Focus() {
   const [time, setTime] = useState(1500);
   const [running, setRunning] = useState(false);
   const [aiReply, setAiReply] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
+  // --------------------------
+  // 🔥 Helper to update weekly analytics
+  // --------------------------
+  const logFocusSession = (mins) => {
+    const STORAGE_KEY = "elevate_week_focus";
+    const WEEK_START_KEY = "elevate_week_start";
+
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const today = dayNames[new Date().getDay()];
+
+    // Get existing or init
+    let data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    if (
+      !data.Mon ||
+      !data.Tue ||
+      !data.Wed ||
+      !data.Thu ||
+      !data.Fri ||
+      !data.Sat ||
+      !data.Sun
+    ) {
+      data = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
+    }
+
+    // Add today's minutes
+    data[today] += mins;
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(WEEK_START_KEY, new Date().toISOString());
+
+    // Show small confirmation
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 2000);
+  };
+
+  // --------------------------
+  // TIMER LOGIC
+  // --------------------------
   useEffect(() => {
     let x;
     if (running && time > 0) {
       x = setInterval(() => setTime((t) => t - 1), 1000);
     }
+
+    // When timer finishes → update analytics
+    if (running && time === 0) {
+      setRunning(false);
+      logFocusSession(25); // Log 25 minutes
+    }
+
     return () => clearInterval(x);
   }, [running, time]);
 
@@ -31,6 +77,13 @@ export default function Focus() {
 
   return (
     <div className="relative pt-28 px-6 min-h-screen bg-gradient-to-br from-[#F6F1FF] via-[#FBF9FF] to-[#EDE9F7]">
+
+      {/* SUCCESS TOAST */}
+      {showSuccess && (
+        <div className="fixed top-6 right-6 bg-green-500 text-white px-4 py-2 rounded-xl shadow-lg animate-fadeIn">
+          ✔ Session added to analytics!
+        </div>
+      )}
 
       {/* Page Title */}
       <h1 className="text-4xl font-extrabold text-center text-[#1A1A2E] drop-shadow-sm">
