@@ -9,28 +9,39 @@ export default function Analytics() {
   });
   const [total, setTotal] = useState(0);
   const [avg, setAvg] = useState(0);
+  const [error, setError] = useState("");
 
-  // Fetch and compute weekly data
   useEffect(() => {
     const fetchSessions = async () => {
-      const res = await axios.get(`${API}/focus`);
-      const sessions = res.data;
+      try {
+        const res = await axios.get(`${API}/focus`);
 
-      const week = {
-        Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0,
-      };
+        if (!Array.isArray(res.data)) {
+          setError("Invalid data received");
+          return;
+        }
 
-      sessions.forEach((s) => {
-        const day = new Date(s.date).getDay();
-        const names = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        week[names[day]] += s.duration;
-      });
+        const sessions = res.data;
 
-      setWeekData(week);
+        const week = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-      const t = Object.values(week).reduce((a, b) => a + b, 0);
-      setTotal(t);
-      setAvg(t / 7);
+        sessions.forEach((s) => {
+          if (!s.date || !s.duration) return; // ignore broken entries
+          const dayIndex = new Date(s.date).getDay();
+          const day = dayNames[dayIndex];
+          week[day] += Number(s.duration);
+        });
+
+        setWeekData(week);
+
+        const t = Object.values(week).reduce((a, b) => a + b, 0);
+        setTotal(t);
+        setAvg(t / 7);
+      } catch (err) {
+        setError("Failed to load analytics");
+        console.error("Analytics error:", err);
+      }
     };
 
     fetchSessions();
@@ -43,7 +54,7 @@ export default function Analytics() {
     datasets: [
       {
         label: "Minutes",
-        data: labels.map((l) => weekData[l]),
+        data: labels.map((l) => Number(weekData[l] || 0)),
         borderColor: "#7F5AF0",
         backgroundColor: "rgba(127,90,240,0.25)",
         tension: 0.4,
@@ -54,7 +65,16 @@ export default function Analytics() {
 
   return (
     <div className="pt-28 px-6 min-h-screen bg-gradient-to-br from-[#F3EDFF] via-white to-[#EDE9F7]">
-      <h1 className="text-4xl font-bold text-center text-[#1A1A2E]">Weekly Analytics 📊</h1>
+
+      {error && (
+        <div className="text-center text-red-600 text-lg font-semibold mb-6">
+          ⚠️ {error}
+        </div>
+      )}
+
+      <h1 className="text-4xl font-bold text-center text-[#1A1A2E]">
+        Weekly Analytics 📊
+      </h1>
 
       <div className="max-w-6xl mx-auto mt-10 grid md:grid-cols-3 gap-6">
         <div className="p-6 bg-white/80 rounded-3xl text-center shadow-lg">
