@@ -8,7 +8,7 @@ export default function MusicPlayer() {
 
   // WORKING LO-FI MP3 TRACK
   const defaultTrack =
-    "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Ziklibrenbib/KieLoBot/Winter_Training/KieLoBot_-_01_-_The_Way_Out.mp3";
+  "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Ziklibrenbib/KieLoBot/Winter_Training/KieLoBot_-_01_-_The_Way_Out.mp3";
 
   const togglePlay = () => {
     if (!isPlaying) {

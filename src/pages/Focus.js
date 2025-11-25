@@ -9,38 +9,17 @@ export default function Focus() {
   const [showSuccess, setShowSuccess] = useState(false);
 
   // --------------------------
-  // 🔥 Helper to update weekly analytics
+  // 🔥 Save focus session to backend
   // --------------------------
-  const logFocusSession = (mins) => {
-    const STORAGE_KEY = "elevate_week_focus";
-    const WEEK_START_KEY = "elevate_week_start";
+  const saveSession = async (mins) => {
+    try {
+      await axios.post(`${API}/focus`, { duration: mins });
 
-    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const today = dayNames[new Date().getDay()];
-
-    // Get existing or init
-    let data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    if (
-      !data.Mon ||
-      !data.Tue ||
-      !data.Wed ||
-      !data.Thu ||
-      !data.Fri ||
-      !data.Sat ||
-      !data.Sun
-    ) {
-      data = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 2000);
+    } catch (err) {
+      console.log("Failed to save session:", err);
     }
-
-    // Add today's minutes
-    data[today] += mins;
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    localStorage.setItem(WEEK_START_KEY, new Date().toISOString());
-
-    // Show small confirmation
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 2000);
   };
 
   // --------------------------
@@ -48,14 +27,15 @@ export default function Focus() {
   // --------------------------
   useEffect(() => {
     let x;
+
     if (running && time > 0) {
       x = setInterval(() => setTime((t) => t - 1), 1000);
     }
 
-    // When timer finishes → update analytics
+    // Natural finish
     if (running && time === 0) {
       setRunning(false);
-      logFocusSession(25); // Log 25 minutes
+      saveSession(25); // full session
     }
 
     return () => clearInterval(x);
@@ -63,6 +43,14 @@ export default function Focus() {
 
   const m = String(Math.floor(time / 60)).padStart(2, "0");
   const s = String(time % 60).padStart(2, "0");
+
+  // Finish early handler
+  const finishEarly = () => {
+    const mins = Math.floor((1500 - time) / 60);
+    if (mins > 0) saveSession(mins);
+    setRunning(false);
+    setTime(1500);
+  };
 
   const askAI = async () => {
     try {
@@ -81,7 +69,7 @@ export default function Focus() {
       {/* SUCCESS TOAST */}
       {showSuccess && (
         <div className="fixed top-6 right-6 bg-green-500 text-white px-4 py-2 rounded-xl shadow-lg animate-fadeIn">
-          ✔ Session added to analytics!
+          ✔ Session saved!
         </div>
       )}
 
@@ -105,6 +93,13 @@ export default function Focus() {
             className="px-8 py-3 rounded-xl bg-[#7F5AF0] text-white shadow hover:bg-[#6B47DD]"
           >
             {running ? "Pause" : "Start"}
+          </button>
+
+          <button
+            onClick={finishEarly}
+            className="px-8 py-3 rounded-xl bg-[#ffdfe6] text-[#d14a5b] border border-[#f7bccc] hover:bg-[#ffcfdd]"
+          >
+            Finish Early
           </button>
 
           <button
