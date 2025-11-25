@@ -1,29 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
 import axios from "axios";
 import { API } from "../config";
 
-// 📌 CHART.JS REGISTRATION — THIS WAS MISSING!
+// ✅ FIX: Auto-register ALL Chart.js scales & controllers
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+} from "chart.js/auto";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { Line } from "react-chartjs-2";
 
 export default function Analytics() {
   const [weekData, setWeekData] = useState({
