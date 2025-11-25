@@ -10,7 +10,7 @@ export default function MusicPlayer() {
 
   // Default Lo-Fi Focus Track 🎧 (works offline)
   const defaultTrack =
-  "https://youtu.be/sPf6o7HCg5o";
+  "https://www.youtube.com/watch?v=yf5NOyy1SXU";
 
   const togglePlay = () => {
     if (!isPlaying) {
@@ -72,14 +72,6 @@ export default function MusicPlayer() {
             </button>
 
             <audio ref={audioRef} src={defaultTrack} loop />
-
-            {/* Optional connection suggestion */}
-            <p className="text-xs text-slate-400 mt-2">
-              Want custom playlists? <br />
-              <span className="underline cursor-pointer text-indigo-600 hover:text-indigo-700">
-                Connect Spotify / YouTube
-              </span>
-            </p>
           </div>
         </div>
       )}

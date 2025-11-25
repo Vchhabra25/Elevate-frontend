@@ -130,10 +130,10 @@ export default function Focus() {
 
           <div className="space-y-3">
             {[
-              { title: "LoFi Beats Radio", link: "https://youtu.be/5qap5aO4i9A" },
-              { title: "Deep Focus Music", link: "https://youtu.be/wDjeBNv6ip0" },
+              { title: "LoFi Beats Radio", link: "https://www.youtube.com/watch?v=jfKfPfyJRdk" },
+              { title: "Deep Focus Music", link: "https://www.youtube.com/watch?v=hIH1joP9_FU" },
               { title: "Ambient Soft Piano", link: "https://youtu.be/Dx5qFachd3A" },
-              { title: "Relaxing Nature Sounds", link: "https://youtu.be/odfF-p9K5O8" },
+              { title: "Relaxing Nature Sounds", link: "https://www.youtube.com/watch?v=0xmaG9TxV-g" },
             ].map((music) => (
               <a
                 key={music.title}
