@@ -1,16 +1,14 @@
 import React, { useRef, useState } from "react";
 import { Music, Play, Pause, X } from "lucide-react";
-import { API } from "../config";
-
 
 export default function MusicPlayer() {
   const audioRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Default Lo-Fi Focus Track 🎧 (works offline)
+  // WORKING LO-FI MP3 TRACK
   const defaultTrack =
-  "https://www.youtube.com/watch?v=yf5NOyy1SXU";
+    "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/Ziklibrenbib/KieLoBot/Winter_Training/KieLoBot_-_01_-_The_Way_Out.mp3";
 
   const togglePlay = () => {
     if (!isPlaying) {
@@ -52,6 +50,7 @@ export default function MusicPlayer() {
             <p className="text-xs text-slate-500">
               Lo-Fi Beats to Study & Focus
             </p>
+
             <button
               onClick={togglePlay}
               className={`px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium ${
@@ -71,6 +70,7 @@ export default function MusicPlayer() {
               )}
             </button>
 
+            {/* Actual audio */}
             <audio ref={audioRef} src={defaultTrack} loop />
           </div>
         </div>
