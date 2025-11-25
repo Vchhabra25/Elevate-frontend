@@ -5,6 +5,24 @@ import { API } from "../config";
 /*  
   ELEVATE DASHBOARD (UPGRADED UI)
 */
+function updateWeeklyMinutes(minutes) {
+  const STORAGE_KEY = "elevate_week_focus";
+  const WEEK_START_KEY = "elevate_week_start";
+
+  // ensure week exists
+  const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+    Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0
+  };
+
+  const d = new Date();
+  const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()];
+  
+  // add minutes
+  data[weekday] = (Number(data[weekday]) || 0) + minutes;
+
+  // save
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
 
 // -------------------- FOCUS TIMER --------------------
 function FocusTimer() {
